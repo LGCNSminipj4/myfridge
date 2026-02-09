@@ -23,6 +23,13 @@ public class UserService {
 
     @Transactional
     public void signup(SignupRequestDTO request) {
+        if (request.getUserId() == null ||
+                request.getPassword() == null ||
+                request.getName() == null ||
+                request.getBirthYear() == null) {
+            throw new IllegalArgumentException("필수 회원정보 누락");
+        }
+
         // 1. 아이디 중복 재검사
         if (userMapper.countByUserId(request.getUserId()) > 0) {
             throw new IllegalStateException("이미 존재하는 아이디");
