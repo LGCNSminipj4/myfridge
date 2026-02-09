@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.myfridge.auth.domain.dto.SignupRequestDTO;
-import com.example.myfridge.auth.domain.dto.SignupResponseDTO;
 import com.example.myfridge.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +11,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,10 +49,29 @@ public class AuthController {
 
             - 선호 태그는 여러 개 선택할 수 있습니다.
             - 아이디 중복은 서버에서 다시 한 번 검증합니다.""")
-    public ResponseEntity<SignupResponseDTO> signup(@RequestBody SignupRequestDTO request) {
+    public ResponseEntity<Map<String, Object>> signup(@RequestBody SignupRequestDTO request) {
         System.out.println(">>>>> signup called (Request: " + request + ")");
-        userService.signup(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        try {
+            userService.signup(request);
+            return ResponseEntity
+                    .ok(Map.of("message", "회원가입 성공"));
+
+        } catch (IllegalStateException e) {
+            // 409 Conflict
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(Map.of(
+                            "code", "CONFLICT",
+                            "message", e.getMessage()));
+
+        } catch (IllegalArgumentException e) {
+            // 400 Bad Request
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of(
+                            "code", "BAD_REQUEST",
+                            "message", e.getMessage()));
+        }
     }
 
 }

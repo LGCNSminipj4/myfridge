@@ -22,9 +22,11 @@ public class UserService {
 
     @Transactional
     public void signup(SignupRequestDTO request) {
+        validateSignupRequest(request);
+
         // 1. 아이디 중복 재검사
         if (userMapper.countByUserId(request.getUserId()) > 0) {
-            throw new IllegalStateException("이미 존재하는 아이디");
+            throw new IllegalStateException("이미 존재하는 아이디입니다.");
         }
 
         // 2. 비밀번호 암호화
@@ -42,6 +44,15 @@ public class UserService {
             userMapper.insertUserPrefer(
                     request.getUserId(),
                     request.getTagIds());
+        }
+    }
+
+    private void validateSignupRequest(SignupRequestDTO request) {
+        if (request.getUserId() == null || request.getUserId().isBlank()
+                || request.getName() == null || request.getName().isBlank()
+                || request.getPassword() == null || request.getPassword().isBlank()
+                || request.getBirthYear() == null) {
+            throw new IllegalArgumentException("필수 입력 값이 누락되었습니다.");
         }
     }
 }
