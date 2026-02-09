@@ -7,4 +7,17 @@
         FROM users
         WHERE user_id = #{userId}
     </select>
+    <!-- insertUser -->
+    <insert id="insertUser">
+        INSERT INTO users (user_id, name, password, birth_year)
+        VALUES (#{userId}, #{name}, #{password}, #{birthYear})
+    </insert>
+    <!-- insertUserPrefer -->
+    <insert id="insertUserPrefer">
+        INSERT INTO users_prefer (user_id, tag_id)
+        VALUES
+        <foreach collection="tagIds" item="tagId" separator=",">
+            (#{userId}, #{tagId})
+        </foreach>
+    </insert>
 </mapper>
