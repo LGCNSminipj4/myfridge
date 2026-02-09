@@ -3,8 +3,8 @@ package com.example.myfridge.auth.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.myfridge.user.domain.dto.SignupRequestDTO;
-import com.example.myfridge.user.domain.dto.SignupResponseDTO;
+import com.example.myfridge.auth.domain.dto.SignupRequestDTO;
+import com.example.myfridge.auth.domain.dto.SignupResponseDTO;
 import com.example.myfridge.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;

@@ -4,8 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.myfridge.user.domain.dto.SignupRequestDTO;
-
+import com.example.myfridge.auth.domain.dto.SignupRequestDTO;
 import com.example.myfridge.user.repository.UserMapper;
 
 import lombok.RequiredArgsConstructor;

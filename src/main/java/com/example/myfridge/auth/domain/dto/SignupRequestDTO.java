@@ -1,4 +1,4 @@
-package com.example.myfridge.user.domain.dto;
+package com.example.myfridge.auth.domain.dto;
 
 import java.util.List;
 
