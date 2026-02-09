@@ -1,4 +1,4 @@
-package com.example.myfridge.user.service;
+package com.example.myfridge.auth.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class AuthService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 

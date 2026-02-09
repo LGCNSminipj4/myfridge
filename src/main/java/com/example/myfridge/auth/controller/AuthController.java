@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.myfridge.auth.domain.dto.SignupRequestDTO;
-import com.example.myfridge.user.service.UserService;
+import com.example.myfridge.auth.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 @Tag(name = "인증(Auth)", description = "회원가입 및 인증 관련 API")
 public class AuthController {
-    private final UserService userService;
+    private final AuthService userService;
 
     @GetMapping("/check-id")
     @Operation(summary = "아이디 중복 검사", description = """
