@@ -4,7 +4,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.myfridge.auth.domain.dto.LoginRequestDTO;
 import com.example.myfridge.auth.domain.dto.SignupRequestDTO;
+import com.example.myfridge.common.exception.BadRequestException;
+import com.example.myfridge.user.domain.User;
 import com.example.myfridge.user.repository.UserMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -45,6 +48,22 @@ public class AuthService {
                     request.getUserId(),
                     request.getTagIds());
         }
+    }
+
+    public void login(LoginRequestDTO request) {
+
+        // 1. 아이디 존재 확인
+        User user = userMapper.findByUserId(request.getUserId());
+        if (user == null) {
+            throw new BadRequestException("아이디 또는 비밀번호가 올바르지 않습니다.");
+        }
+
+        // 2. 비밀번호 검증
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new BadRequestException("아이디 또는 비밀번호가 올바르지 않습니다.");
+        }
+
+        // 3. 로그인 성공
     }
 
     private void validateSignupRequest(SignupRequestDTO request) {

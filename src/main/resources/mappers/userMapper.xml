@@ -20,4 +20,10 @@
             (#{userId}, #{tagId})
         </foreach>
     </insert>
+    <!-- findByUserId -->
+    <select id="findByUserId">
+        SELECT user_id, name, password, birth_year
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
 </mapper>
