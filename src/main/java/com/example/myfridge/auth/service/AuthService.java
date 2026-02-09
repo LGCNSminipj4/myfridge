@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.myfridge.auth.domain.dto.LoginRequestDTO;
 import com.example.myfridge.auth.domain.dto.SignupRequestDTO;
 import com.example.myfridge.common.exception.BadRequestException;
+import com.example.myfridge.common.util.JwtProvider;
 import com.example.myfridge.user.domain.User;
 import com.example.myfridge.user.repository.UserMapper;
 
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     public boolean isUserIdAvailable(String userId) {
         int count = userMapper.countByUserId(userId);
@@ -50,7 +52,7 @@ public class AuthService {
         }
     }
 
-    public void login(LoginRequestDTO request) {
+    public String login(LoginRequestDTO request) {
 
         // 1. 아이디 존재 확인
         User user = userMapper.findByUserId(request.getUserId());
@@ -64,6 +66,7 @@ public class AuthService {
         }
 
         // 3. 로그인 성공
+        return jwtProvider.createAccessToken(request.getUserId());
     }
 
     private void validateSignupRequest(SignupRequestDTO request) {

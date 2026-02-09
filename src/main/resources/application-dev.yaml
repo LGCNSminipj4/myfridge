@@ -14,3 +14,8 @@ spring:
 # mybatis
 mybatis:
   mapper-locations: classpath:/mappers/**/*.xml
+
+# jwt
+jwt:
+  secret: 6OvJOWhmXqNQgR0KUJri8NRkIPWEMOz670ZOmfoD0zq
+  access-token-expiration: 3600000 # 1시간 (ms)

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.myfridge.auth.domain.dto.LoginRequestDTO;
+import com.example.myfridge.auth.domain.dto.LoginResponseDTO;
 import com.example.myfridge.auth.domain.dto.SignupRequestDTO;
 import com.example.myfridge.auth.service.AuthService;
 import com.example.myfridge.common.exception.BadRequestException;
@@ -82,8 +83,8 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO request) {
         System.out.println(">>>>> login called (Request: " + request + ")");
         try {
-            authService.login(request);
-            return ResponseEntity.ok("로그인 성공");
+            String token = authService.login(request);
+            return ResponseEntity.ok(new LoginResponseDTO(token));
         } catch (BadRequestException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
