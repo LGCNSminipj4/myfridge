@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.myfridge.ingredient.dao.IngredientMapper">
+    <insert id="insertIngredient"
+            parameterType="IngredientRequestDTO">
+        INSERT INTO ingredients(
+            ingredients_name,
+            amount,
+            storage_date,
+            expiration_date,
+            custom_date,
+            category_id,
+            user_id,
+            status
+        ) VALUES (
+            #{ingredientsName},
+            #{amount},
+            COALESCE(#{storageDate}, CURDATE()),
+            #{expirationDate},
+            #{customDate},
+            #{categoryId},
+            #{userId},
+            'ACTIVE'
+        )
+    </insert>
+
+
+    <!-- updateIngredient --> 
+
+    <update id="updateIngredient">
+        UPDATE  ingredients
+        SET     ingredients_name = #{request.ingredientsName},
+                amount = #{request.amount},
+                storage_date = #{request.storageDate},
+                expiration_date = #{request.expirationDate},
+                category_id = #{request.categoryId}
+        WHERE   ingredients_id = #{ingredientsId}
+
+    </update>    
+
+    <!-- deleteIngredient --> 
+
+    <update id="discardIngredient">
+        UPDATE ingredients
+        SET status = 'DISCARDED'
+        WHERE ingredients_id = #{ingredientsId}
+        AND   status = 'ACTIVE'
+    </update>
+    
+    
+
+    <!-- selectIngredientById --> 
+
+    <select id="selectIngredient"
+            resultType="IngredientResponseDTO">
+        SELECT  
+            ingredients_id   AS ingredientsId,
+            ingredients_name AS ingredientsName,
+            amount           AS amount,
+            storage_date     AS storageDate,
+            expiration_date  AS expirationDate,
+            custom_date      AS customDate,
+            category_id      AS categoryId,
+            user_id          AS userId,
+            status           AS status
+        FROM    ingredients
+        WHERE   ingredients_id = #{ingredientsId}
+        AND     status = 'ACTIVE'  
+    </select>
+
+    <!-- selectFridge --> 
+
+    <select id="selectFridge"
+            resultType="IngredientResponseDTO">
+        SELECT  
+            ingredients_id   AS ingredientsId,
+            ingredients_name AS ingredientsName,
+            amount           AS amount,
+            storage_date     AS storageDate,
+            expiration_date  AS expirationDate,
+            custom_date      AS customDate,
+            category_id      AS categoryId,
+            user_id          AS userId,
+            status           AS status
+        FROM    ingredients
+        WHERE   user_id = #{userId}
+        AND     status = 'ACTIVE'
+        ORDER BY
+            expiration_date ASC,
+            storage_date ASC,
+            ingredients_id ASC
+
+    </select>
+
+    <!-- selectDeletedIngredient --> 
+
+    <select id="selectDiscardedIngredient"
+            resultType="IngredientResponseDTO">
+        SELECT  
+            ingredients_id   AS ingredientsId,
+            ingredients_name AS ingredientsName,
+            amount           AS amount,
+            storage_date     AS storageDate,
+            expiration_date  AS expirationDate,
+            custom_date      AS customDate,
+            category_id      AS categoryId,
+            user_id          AS userId,
+            status           AS status
+        FROM    ingredients
+        WHERE   ingredients_id = #{ingredientsId}
+        AND     status = 'DISCARDED'
+    </select>    
+
+    <!-- selectTrash --> 
+
+    <select id="selectTrash"
+            resultType="IngredientResponseDTO">
+        SELECT
+            ingredients_id   AS ingredientsId,
+            ingredients_name AS ingredientsName,
+            amount           AS amount,
+            storage_date     AS storageDate,
+            expiration_date  AS expirationDate,
+            custom_date      AS customDate,
+            category_id      AS categoryId,
+            user_id          AS userId,
+            status           AS status
+        FROM ingredients
+        WHERE user_id = #{userId}
+        AND status = 'DISCARDED'
+        ORDER BY
+            DATEDIFF(CURDATE(), expiration_date) ASC,
+            storage_date ASC,
+            ingredients_id ASC
+    </select>    
+
+    <!-- restoreIngredient --> 
+
+    <update id="restoreIngredient">
+        UPDATE ingredients
+        SET status = 'ACTIVE'
+        WHERE ingredients_id = #{ingredientsId}
+        AND status = 'DISCARDED'
+    </update>
+
+    <!-- deleteIngredient --> 
+
+    <delete id="deleteIngredient">
+        DELETE FROM ingredients
+        WHERE ingredients_id = #{ingredientsId}
+        AND status = 'DISCARDED'
+    </delete>
+    </mapper>
