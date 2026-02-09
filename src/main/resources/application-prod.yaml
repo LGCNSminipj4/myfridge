@@ -1,0 +1,5 @@
+spring:
+  # profiles:
+  config:
+    activate:
+      on-profile: prod
