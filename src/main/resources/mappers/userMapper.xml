@@ -32,4 +32,19 @@
         FROM users_prefer
         WHERE user_id = #{userId}
     </select>
+    <!-- updateUser -->
+    <update id="updateUser">
+        UPDATE users
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="birthYear != null">birth_year = #{birthYear},</if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+    <!-- deleteUserPrefer -->
+    <delete id="deleteUserPrefer">
+        DELETE FROM users_prefer
+        WHERE user_id = #{userId}
+    </delete>
 </mapper>
