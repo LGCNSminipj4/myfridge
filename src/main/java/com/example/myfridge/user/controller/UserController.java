@@ -37,7 +37,12 @@ public class UserController {
     }
 
     @PutMapping("/info")
-    @Operation(summary = "회원정보 수정", description = "비밀번호, 이름, 생년, 선호 요리 태그 등을 수정합니다.")
+    @Operation(summary = "회원정보 수정", description = """
+            비밀번호, 이름, 생년, 선호 요리 태그 등을 수정합니다.
+
+            - 변경하려는 항목만 선택적으로 수정할 수 있습니다.
+            - 변경하지 않는 항목은 해당 필드를 비워둡니다.
+            """)
     public ResponseEntity<?> updateInfo(
             Authentication authentication,
             @RequestBody UserRequestDTO request) {
