@@ -38,6 +38,7 @@
                 expiration_date = #{request.expirationDate},
                 category_id = #{request.categoryId}
         WHERE   ingredients_id = #{ingredientsId}
+        AND status IN ('ACTIVE', 'RESTORE')
 
     </update>    
 

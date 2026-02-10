@@ -20,6 +20,12 @@ public class IngredientService {
     @Transactional
     public int createIngredient(IngredientRequestDTO request) {
         System.out.println(">>>> ingredient service create");
+
+        if (request.getIngredientsName() == null || request.getIngredientsName().isBlank()
+                || request.getUserId() == null || request.getUserId().isBlank()) {
+            throw new IllegalArgumentException("필수값(ingredientsName, userId)을 확인하세요.");
+        }
+
         return ingredientMapper.insertIngredient(request);
 
     }
@@ -27,6 +33,12 @@ public class IngredientService {
     @Transactional
     public int updateIngredient(Integer ingredientsId, IngredientRequestDTO request) {
         System.out.println(">>>> ingredient service update");
+
+        if (request.getIngredientsName() == null || request.getIngredientsName().isBlank()
+                || request.getUserId() == null || request.getUserId().isBlank()) {
+            throw new IllegalArgumentException("필수값(ingredientsName, userId)을 확인하세요.");
+        }
+
         return ingredientMapper.updateIngredient(ingredientsId, request);
     }
 
@@ -36,11 +48,11 @@ public class IngredientService {
         return ingredientMapper.discardIngredient(ingredientsId);
     }
 
-    @Transactional
-    public int autoDiscard(String userId) {
-        System.out.println(">>>> ingredient service autoDiscard");
-        return ingredientMapper.autoDiscard(userId);
-    }
+    // @Transactional
+    // public int autoDiscard(String userId) {
+    // System.out.println(">>>> ingredient service autoDiscard");
+    // return ingredientMapper.autoDiscard(userId);
+    // }
 
     @Transactional(readOnly = true)
     public IngredientResponseDTO getIngredient(Integer ingredientsId) {
@@ -82,10 +94,10 @@ public class IngredientService {
         return ingredientMapper.deleteIngredient(ingredientsId);
     }
 
-    @Transactional
-    public int autoDelete(String userId) {
-        System.out.println(">>>> ingredient service autoDelete");
-        return ingredientMapper.autoDelete(userId);
-    }
+    // @Transactional
+    // public int autoDelete(String userId) {
+    // System.out.println(">>>> ingredient service autoDelete");
+    // return ingredientMapper.autoDelete(userId);
+    // }
 
 }
