@@ -62,7 +62,7 @@ public class IngredientController {
                 .storageDate(request.getStorageDate())
                 .expirationDate(request.getExpirationDate())
                 .customDate(request.getCustomDate())
-                .categoryId(request.getCategoryId())
+                .storageCondition(request.getStorageCondition())
                 .build();
         try {
             ingredientService.createIngredient(dto);

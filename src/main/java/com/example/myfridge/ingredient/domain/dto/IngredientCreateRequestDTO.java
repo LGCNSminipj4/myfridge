@@ -19,5 +19,5 @@ public class IngredientCreateRequestDTO {
     private LocalDate storageDate;
     private LocalDate expirationDate;
     private LocalDate customDate;
-    private Integer categoryId;
+    private String storageCondition;
 }
