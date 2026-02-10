@@ -40,7 +40,7 @@ CREATE TABLE ingredients (
 	custom_date			DATE,
 	category_id			INT,
 	user_id				VARCHAR(20) NOT NULL,
-	status				ENUM('ACTIVE','DELETED','CONSUMED','DISCARDED') NOT NULL DEFAULT 'ACTIVE',
+	status				ENUM('ACTIVE','RESTORE','CONSUMED','DISCARDED') NOT NULL DEFAULT 'ACTIVE',
 	
 	FOREIGN KEY(user_id) REFERENCES users (user_id)
 	ON DELETE CASCADE,
