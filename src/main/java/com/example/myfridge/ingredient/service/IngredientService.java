@@ -48,7 +48,7 @@ public class IngredientService {
         return ingredientMapper.selectIngredient(ingredientsId);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<IngredientResponseDTO> getFridge(String userId) {
         System.out.println(">>>> ingredient service getFridge");
         // 현재는 로그인 서비스가 없어 소비기한 지난 식재료 자동삭제는 냉장고 조회 흐름에서 반영
@@ -62,7 +62,7 @@ public class IngredientService {
         return ingredientMapper.selectDiscardedIngredient(ingredientsId);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<IngredientResponseDTO> getTrash(String userId) {
         System.out.println(">>>> ingredient service getTrash");
         // 쓰레기통 조회시 삭제 상태 + 소비기한 30일 초과 식재료 DB 완전 삭제
