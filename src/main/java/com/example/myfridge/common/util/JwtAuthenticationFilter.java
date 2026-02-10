@@ -25,30 +25,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
+        // Skip preflight requests so CORS preflight isn't processed by JWT logic
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String authHeader = request.getHeader("Authorization");
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
+        try {
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring(7);
 
-            try {
-                String userId = jwtProvider.getUserIdFromToken(token);
+                // Swagger에서 오는 빈 토큰 방어
+                if (!token.isBlank()) {
+                    String userId = jwtProvider.getUserIdFromToken(token);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userId, // principal
-                        null, // credentials
-                        List.of() // 권한 (빈 리스트)
-                );
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userId,
+                            null,
+                            List.of());
 
-                SecurityContextHolder.getContext()
-                        .setAuthentication(authentication);
-
-            } catch (Exception e) {
-                // 토큰 위조/만료 → 인증 정보 안 넣고 그냥 통과
-                SecurityContextHolder.clearContext();
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
         }
-
         filterChain.doFilter(request, response);
     }
 }
