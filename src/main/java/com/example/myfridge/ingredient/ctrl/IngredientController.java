@@ -2,6 +2,7 @@ package com.example.myfridge.ingredient.ctrl;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.myfridge.ingredient.domain.dto.IngredientCreateRequestDTO;
 import com.example.myfridge.ingredient.domain.dto.IngredientRequestDTO;
 import com.example.myfridge.ingredient.domain.dto.IngredientResponseDTO;
 import com.example.myfridge.ingredient.service.IngredientService;
@@ -18,6 +19,7 @@ import java.util.Map;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,12 +48,24 @@ public class IngredientController {
             - 등록 날짜가 null일 경우 현재 날짜로 등록됩니다.
             """)
     @PostMapping("/insert")
-    public ResponseEntity<Map<String, String>> createIngredient(@RequestBody IngredientRequestDTO request) {
+    public ResponseEntity<Map<String, String>> createIngredient(Authentication authentication,
+            @RequestBody IngredientCreateRequestDTO request) {
         System.out.println(">>>> ingredient ctrl path : /insert");
         System.out.println(">>>> params : " + request);
 
+        // 인증된 사용자 정보에서 userId 추출
+        String userId = (String) authentication.getPrincipal();
+        IngredientRequestDTO dto = IngredientRequestDTO.builder()
+                .userId(userId)
+                .ingredientsName(request.getIngredientsName())
+                .amount(request.getAmount())
+                .storageDate(request.getStorageDate())
+                .expirationDate(request.getExpirationDate())
+                .customDate(request.getCustomDate())
+                .categoryId(request.getCategoryId())
+                .build();
         try {
-            ingredientService.createIngredient(request);
+            ingredientService.createIngredient(dto);
             return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "식재료 등록 완료"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
