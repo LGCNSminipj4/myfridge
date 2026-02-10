@@ -21,9 +21,15 @@
         </foreach>
     </insert>
     <!-- findByUserId -->
-    <select id="findByUserId">
-        SELECT user_id, name, password, birth_year
+    <select id="findByUserId" resultType="com.example.myfridge.user.domain.User">
+        SELECT user_id as userId, name, password, birth_year as birthYear
         FROM users
+        WHERE user_id = #{userId}
+    </select>
+    <!-- findUserPreferTags -->
+    <select id="findUserPreferTags" resultType="int">
+        SELECT tag_id
+        FROM users_prefer
         WHERE user_id = #{userId}
     </select>
 </mapper>

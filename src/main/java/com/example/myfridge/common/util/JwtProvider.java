@@ -3,11 +3,12 @@ package com.example.myfridge.common.util;
 import java.security.Key;
 import java.util.Date;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
 @Component
@@ -27,7 +28,16 @@ public class JwtProvider {
                 .subject(userId)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expirationTime))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .signWith(key)
                 .compact();
+    }
+
+    public String getUserIdFromToken(String token) {
+        return Jwts.parser()
+                .verifyWith((SecretKey) key) // 🔥 setSigningKey 아님
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
     }
 }

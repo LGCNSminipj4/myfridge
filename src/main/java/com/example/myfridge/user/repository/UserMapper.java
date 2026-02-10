@@ -1,5 +1,7 @@
 package com.example.myfridge.user.repository;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,4 +22,6 @@ public interface UserMapper {
         void insertUserPrefer(
                         @Param("userId") String userId,
                         @Param("tagIds") java.util.List<Integer> tagIds);
+
+        List<Integer> findUserPreferTags(String userId);
 }
