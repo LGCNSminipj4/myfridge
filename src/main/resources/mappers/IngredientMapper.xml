@@ -12,7 +12,7 @@
             storage_date,
             expiration_date,
             custom_date,
-            category_id,
+            storage_condition,
             user_id,
             status
         ) VALUES (
@@ -21,7 +21,7 @@
             COALESCE(#{storageDate}, CURDATE()),
             #{expirationDate},
             #{customDate},
-            #{categoryId},
+            #{storageCondition},
             #{userId},
             'ACTIVE'
         )
@@ -36,7 +36,7 @@
                 amount = #{request.amount},
                 storage_date = #{request.storageDate},
                 expiration_date = #{request.expirationDate},
-                category_id = #{request.categoryId}
+                storage_condition = #{request.storageCondition}
         WHERE   ingredients_id = #{ingredientsId}
         AND status IN ('ACTIVE', 'RESTORE')
 
@@ -73,7 +73,7 @@
             storage_date     AS storageDate,
             expiration_date  AS expirationDate,
             custom_date      AS customDate,
-            category_id      AS categoryId,
+            storage_condition AS storageCondition,
             user_id          AS userId,
             status           AS status
         FROM    ingredients
@@ -92,7 +92,7 @@
             storage_date     AS storageDate,
             expiration_date  AS expirationDate,
             custom_date      AS customDate,
-            category_id      AS categoryId,
+            storage_condition AS storageCondition,
             user_id          AS userId,
             status           AS status
         FROM    ingredients
@@ -116,7 +116,7 @@
             storage_date     AS storageDate,
             expiration_date  AS expirationDate,
             custom_date      AS customDate,
-            category_id      AS categoryId,
+            storage_condition AS storageCondition,
             user_id          AS userId,
             status           AS status
         FROM    ingredients
@@ -135,7 +135,7 @@
             storage_date     AS storageDate,
             expiration_date  AS expirationDate,
             custom_date      AS customDate,
-            category_id      AS categoryId,
+            storage_condition AS storageCondition,
             user_id          AS userId,
             status           AS status
         FROM ingredients

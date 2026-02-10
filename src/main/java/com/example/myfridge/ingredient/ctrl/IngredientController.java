@@ -39,7 +39,7 @@ public class IngredientController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "식재료 등록 완료"),
             @ApiResponse(responseCode = "400", description = "필수값 누락/잘못된 입력"),
-            @ApiResponse(responseCode = "409", description = "존재하지 않는 userId/categoryId")
+            @ApiResponse(responseCode = "409", description = "존재하지 않는 userId")
     })
     @Operation(summary = "식재료 등록", description = """
             식재료 정보를 입력하여 냉장고에 재료를 추가합니다.
@@ -71,7 +71,7 @@ public class IngredientController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", "존재하지 않는 userId/categoryId 입니다."));
+                    .body(Map.of("message", "존재하지 않는 userId 입니다."));
         }
 
     }
@@ -82,7 +82,7 @@ public class IngredientController {
             @ApiResponse(responseCode = "200", description = "식재료 수정 완료"),
             @ApiResponse(responseCode = "400", description = "잘못된 요청"),
             @ApiResponse(responseCode = "404", description = "수정 대상 없음"),
-            @ApiResponse(responseCode = "409", description = "존재하지 않는 categoryId")
+            @ApiResponse(responseCode = "409", description = "존재하지 않는 userId")
     })
     @PutMapping("/update/{ingredientsId}")
     public ResponseEntity<Map<String, String>> updateIngredient(@PathVariable Integer ingredientsId,
@@ -105,7 +105,7 @@ public class IngredientController {
                     .body(Map.of("message", e.getMessage()));
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", "존재하지 않는 categoryId 입니다."));
+                    .body(Map.of("message", "존재하지 않는 userId 입니다."));
         }
 
     }
