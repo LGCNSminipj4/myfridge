@@ -36,6 +36,12 @@ public class IngredientService {
         return ingredientMapper.discardIngredient(ingredientsId);
     }
 
+    @Transactional
+    public int autoDiscard(String userId) {
+        System.out.println(">>>> ingredient service autoDiscard");
+        return ingredientMapper.autoDiscard(userId);
+    }
+
     @Transactional(readOnly = true)
     public IngredientResponseDTO getIngredient(Integer ingredientsId) {
         System.out.println(">>>> ingredient service getIngredient");
@@ -45,6 +51,8 @@ public class IngredientService {
     @Transactional(readOnly = true)
     public List<IngredientResponseDTO> getFridge(String userId) {
         System.out.println(">>>> ingredient service getFridge");
+        // 현재는 로그인 서비스가 없어 소비기한 지난 식재료 자동삭제는 냉장고 조회 흐름에서 반영
+        ingredientMapper.autoDiscard(userId);
         return ingredientMapper.selectFridge(userId);
     }
 
@@ -57,6 +65,8 @@ public class IngredientService {
     @Transactional(readOnly = true)
     public List<IngredientResponseDTO> getTrash(String userId) {
         System.out.println(">>>> ingredient service getTrash");
+        // 쓰레기통 조회시 삭제 상태 + 소비기한 30일 초과 식재료 DB 완전 삭제
+        ingredientMapper.autoDelete(userId);
         return ingredientMapper.selectTrash(userId);
     }
 
@@ -70,6 +80,12 @@ public class IngredientService {
     public int deleteIngredient(Integer ingredientsId) {
         System.out.println(">>>> ingredient service deleteIngredient");
         return ingredientMapper.deleteIngredient(ingredientsId);
+    }
+
+    @Transactional
+    public int autoDelete(String userId) {
+        System.out.println(">>>> ingredient service autoDelete");
+        return ingredientMapper.autoDelete(userId);
     }
 
 }

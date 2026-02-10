@@ -18,6 +18,8 @@ public interface IngredientMapper {
 
     int discardIngredient(Integer ingredientsId);
 
+    int autoDiscard(String userId);
+
     IngredientResponseDTO selectIngredient(Integer ingredientsId);
 
     List<IngredientResponseDTO> selectFridge(String userId);
@@ -29,4 +31,7 @@ public interface IngredientMapper {
     int restoreIngredient(Integer ingredientsId);
 
     int deleteIngredient(Integer ingredientsId);
+
+    int autoDelete(String userId);
+
 }

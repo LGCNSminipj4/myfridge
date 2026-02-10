@@ -39,7 +39,7 @@
 
     </update>    
 
-    <!-- deleteIngredient --> 
+    <!-- discardIngredient --> 
 
     <update id="discardIngredient">
         UPDATE ingredients
@@ -47,10 +47,17 @@
         WHERE ingredients_id = #{ingredientsId}
         AND   status = 'ACTIVE'
     </update>
-    
-    
 
-    <!-- selectIngredientById --> 
+    <update id="autoDiscard">
+        UPDATE ingredients
+        SET status = 'DISCARDED'
+        WHERE user_id = #{userId}
+          AND status = 'ACTIVE'
+          AND expiration_date IS NOT NULL
+          AND expiration_date &lt; CURDATE()
+    </update>
+
+    <!-- selectIngredient --> 
 
     <select id="selectIngredient"
             resultType="IngredientResponseDTO">
@@ -93,7 +100,7 @@
 
     </select>
 
-    <!-- selectDeletedIngredient --> 
+    <!-- selectDiscardedIngredient --> 
 
     <select id="selectDiscardedIngredient"
             resultType="IngredientResponseDTO">
@@ -151,4 +158,14 @@
         WHERE ingredients_id = #{ingredientsId}
         AND status = 'DISCARDED'
     </delete>
-    </mapper>
+
+    <!-- autoDelete --> 
+
+    <delete id="autoDelete">
+        DELETE FROM ingredients
+        WHERE user_id = #{userId}
+        AND status = 'DISCARDED'
+        AND expiration_date IS NOT NULL
+        AND DATEDIFF(CURDATE(), expiration_date) &gt; 30
+    </delete>    
+</mapper>
