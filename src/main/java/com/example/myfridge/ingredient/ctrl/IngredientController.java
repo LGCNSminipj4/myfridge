@@ -8,6 +8,7 @@ import com.example.myfridge.ingredient.domain.dto.IngredientResponseDTO;
 import com.example.myfridge.ingredient.service.IngredientService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -134,7 +135,8 @@ public class IngredientController {
             @ApiResponse(responseCode = "404", description = "조회 대상 없음")
     })
     @GetMapping("/detail/{ingredientsId}")
-    public ResponseEntity<IngredientResponseDTO> getIngredient(@PathVariable Integer ingredientsId) {
+    public ResponseEntity<IngredientResponseDTO> getIngredient(
+            @Parameter(description = "식재료 ID", example = "1", required = true) @PathVariable(name = "ingredientsId") Integer ingredientsId) {
         IngredientResponseDTO result = ingredientService.getIngredient(ingredientsId);
 
         if (result == null) {
@@ -168,7 +170,8 @@ public class IngredientController {
             @ApiResponse(responseCode = "404", description = "조회 대상 없음")
     })
     @GetMapping("/trash/detail/{ingredientsId}")
-    public ResponseEntity<IngredientResponseDTO> getDiscardedIngredient(@PathVariable Integer ingredientsId) {
+    public ResponseEntity<IngredientResponseDTO> getDiscardedIngredient(
+            @Parameter(description = "식재료 ID", example = "1", required = true) @PathVariable(name = "ingredientsId") Integer ingredientsId) {
         IngredientResponseDTO result = ingredientService.getDiscardedIngredient(ingredientsId);
 
         if (result == null) {
