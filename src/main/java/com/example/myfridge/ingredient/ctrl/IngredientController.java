@@ -150,7 +150,9 @@ public class IngredientController {
             @ApiResponse(responseCode = "404", description = "조회 결과 없음")
     })
     @GetMapping("/fridge/{userId}")
-    public ResponseEntity<List<IngredientResponseDTO>> getFridge(@PathVariable String userId) {
+    public ResponseEntity<List<IngredientResponseDTO>> getFridge(Authentication authentication) {
+        // 인증된 사용자 정보에서 userId 추출
+        String userId = (String) authentication.getPrincipal();
         List<IngredientResponseDTO> result = ingredientService.getFridge(userId);
 
         if (result.size() == 0) {
