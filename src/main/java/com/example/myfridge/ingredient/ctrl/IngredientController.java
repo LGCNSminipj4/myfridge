@@ -86,14 +86,27 @@ public class IngredientController {
             @ApiResponse(responseCode = "409", description = "존재하지 않는 userId")
     })
     @PutMapping("/update/{ingredientsId}")
-    public ResponseEntity<Map<String, String>> updateIngredient(@PathVariable Integer ingredientsId,
-            @RequestBody IngredientRequestDTO request) {
+    public ResponseEntity<Map<String, String>> updateIngredient(Authentication authentication,
+            @PathVariable(name = "ingredientsId") Integer ingredientsId,
+            @RequestBody IngredientCreateRequestDTO request) {
         System.out.println(">>>> ingredient ctrl path : /update");
         System.out.println(">>>> ingredientsId : " + ingredientsId);
         System.out.println(">>>> params : " + request);
 
+        // 인증된 사용자 정보에서 userId 추출
+        String userId = (String) authentication.getPrincipal();
+        IngredientRequestDTO dto = IngredientRequestDTO.builder()
+                .userId(userId)
+                .ingredientsName(request.getIngredientsName())
+                .amount(request.getAmount())
+                .storageDate(request.getStorageDate())
+                .expirationDate(request.getExpirationDate())
+                .customDate(request.getCustomDate())
+                .storageCondition(request.getStorageCondition())
+                .build();
+
         try {
-            int flag = ingredientService.updateIngredient(ingredientsId, request);
+            int flag = ingredientService.updateIngredient(ingredientsId, dto);
 
             if (flag == 0) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -118,7 +131,8 @@ public class IngredientController {
             @ApiResponse(responseCode = "404", description = "삭제 대상 없음")
     })
     @PutMapping("/trash/{ingredientsId}")
-    public ResponseEntity<Map<String, String>> discardIngredient(@PathVariable Integer ingredientsId) {
+    public ResponseEntity<Map<String, String>> discardIngredient(
+            @PathVariable(name = "ingredientsId") Integer ingredientsId) {
         int flag = ingredientService.discardIngredient(ingredientsId);
 
         if (flag == 0) {
@@ -186,8 +200,10 @@ public class IngredientController {
             @ApiResponse(responseCode = "200", description = "조회 성공"),
             @ApiResponse(responseCode = "404", description = "조회 결과 없음")
     })
-    @GetMapping("/trash/{userId}")
-    public ResponseEntity<List<IngredientResponseDTO>> getTrash(@PathVariable String userId) {
+    @GetMapping("/trash")
+    public ResponseEntity<List<IngredientResponseDTO>> getTrash(Authentication authentication) {
+        // 인증된 사용자 정보에서 userId 추출
+        String userId = (String) authentication.getPrincipal();
         List<IngredientResponseDTO> result = ingredientService.getTrash(userId);
 
         if (result.size() == 0) {
@@ -203,7 +219,8 @@ public class IngredientController {
             @ApiResponse(responseCode = "404", description = "복구 대상 없음")
     })
     @PutMapping("/trash/restore/{ingredientsId}")
-    public ResponseEntity<Map<String, String>> restoreIngredient(@PathVariable Integer ingredientsId) {
+    public ResponseEntity<Map<String, String>> restoreIngredient(
+            @PathVariable(name = "ingredientsId") Integer ingredientsId) {
         int flag = ingredientService.restoreIngredient(ingredientsId);
 
         if (flag == 0) {
@@ -221,7 +238,8 @@ public class IngredientController {
             @ApiResponse(responseCode = "404", description = "삭제 대상 없음")
     })
     @DeleteMapping("/trash/{ingredientsId}")
-    public ResponseEntity<Map<String, String>> deleteIngredient(@PathVariable Integer ingredientsId) {
+    public ResponseEntity<Map<String, String>> deleteIngredient(
+            @PathVariable(name = "ingredientsId") Integer ingredientsId) {
         int flag = ingredientService.deleteIngredient(ingredientsId);
 
         if (flag == 0) {
