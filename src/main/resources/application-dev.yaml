@@ -20,3 +20,7 @@ mybatis:
 jwt:
   secret: 6OvJOWhmXqNQgR0KUJri8NRkIPWEMOz670ZOmfoD0zq
   access-token-expiration: 10800000 # 3시간 (ms)
+
+youtube:
+  api:
+    key: AIzaSyCdhmTOK8hus6guX8kRuohzsR7c4Y7if-M
