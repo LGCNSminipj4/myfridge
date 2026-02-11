@@ -100,4 +100,14 @@ public class IngredientService {
     // return ingredientMapper.autoDelete(userId);
     // }
 
+    @Transactional(readOnly = true)
+    public IngredientResponseDTO getConsumedIngredient(Integer ingredientsId) {
+        return ingredientMapper.selectConsumedIngredient(ingredientsId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<IngredientResponseDTO> getConsumedList(String userId) {
+        return ingredientMapper.selectConsumedList(userId);
+    }
+
 }
