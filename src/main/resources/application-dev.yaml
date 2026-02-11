@@ -19,4 +19,4 @@ mybatis:
 # jwt
 jwt:
   secret: 6OvJOWhmXqNQgR0KUJri8NRkIPWEMOz670ZOmfoD0zq
-  access-token-expiration: 3600000 # 1시간 (ms)
+  access-token-expiration: 10800000 # 3시간 (ms)
