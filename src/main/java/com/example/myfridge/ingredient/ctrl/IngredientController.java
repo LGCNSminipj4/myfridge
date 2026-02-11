@@ -24,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -248,5 +249,19 @@ public class IngredientController {
         } else {
             return ResponseEntity.ok(Map.of("message", "완전 삭제 완료"));
         }
+    }
+
+    @Operation(summary = "삭제된 식재료 이름 조회", description = """
+            쓰레기통에 있는 식재료 이름을 조회합니다. (새 식재료 등록 시 자동완성)
+
+            - ingredientName 파라미터로 이름을 검색할 수 있습니다. (부분 일치 검색)
+            - 동일한 이름의 식재료가 여러 개일 경우 가장 최근에 등록한 식재료만 조회됩니다.""")
+    @GetMapping("/trash/reuse")
+    public ResponseEntity<List<IngredientResponseDTO>> getTrashReuse(Authentication authentication,
+            @RequestParam(name = "ingredientName") String ingredientName) {
+        // 인증된 사용자 정보에서 userId 추출
+        String userId = (String) authentication.getPrincipal();
+        List<IngredientResponseDTO> result = ingredientService.getTrashByName(userId, ingredientName);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

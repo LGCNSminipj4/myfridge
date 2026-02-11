@@ -28,6 +28,10 @@ public interface IngredientMapper {
 
     List<IngredientResponseDTO> selectTrash(String userId);
 
+    List<IngredientResponseDTO> selectTrashByName(
+            @Param("userId") String userId,
+            @Param("ingredientName") String ingredientName);
+
     int restoreIngredient(Integer ingredientsId);
 
     int deleteIngredient(Integer ingredientsId);

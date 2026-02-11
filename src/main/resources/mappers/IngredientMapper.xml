@@ -1,8 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
 <mapper namespace="com.example.myfridge.ingredient.dao.IngredientMapper">
-
     <!-- RQ-0006 식재료 등록 -->
     <insert id="insertIngredient"
             parameterType="IngredientRequestDTO">
@@ -26,10 +24,7 @@
             'ACTIVE'
         )
     </insert>
-
-
-    <!-- RQ-0007 식재료 수정 --> 
-
+    <!-- RQ-0007 식재료 수정 -->
     <update id="updateIngredient">
         UPDATE  ingredients
         SET     ingredients_name = #{request.ingredientsName},
@@ -40,18 +35,15 @@
         WHERE   ingredients_id = #{ingredientsId}
         AND status IN ('ACTIVE', 'RESTORE')
 
-    </update>    
-
-    <!-- RQ-0008 식재료 삭제 (쓰레기통으로) --> 
-
+    </update>
+    <!-- RQ-0008 식재료 삭제 (쓰레기통으로) -->
     <update id="discardIngredient">
         UPDATE ingredients
         SET status = 'DISCARDED'
         WHERE ingredients_id = #{ingredientsId}
         AND status IN ('ACTIVE', 'RESTORE')
     </update>
-
-    <!-- RQ-0009 식재료 자동 삭제 (쓰레기통으로) --> 
+    <!-- RQ-0009 식재료 자동 삭제 (쓰레기통으로) -->
     <!-- 자동 삭제는 ACTIVE만 허용 -->
     <update id="autoDiscard">
         UPDATE ingredients
@@ -61,9 +53,7 @@
           AND expiration_date IS NOT NULL
           AND expiration_date &lt; CURDATE()
     </update>
-
-    <!-- RQ-0010 식재료 단건 조회 --> 
-
+    <!-- RQ-0010 식재료 단건 조회 -->
     <select id="selectIngredient"
             resultType="IngredientResponseDTO">
         SELECT  
@@ -80,9 +70,7 @@
         WHERE   ingredients_id = #{ingredientsId}
           AND status IN ('ACTIVE', 'RESTORE')
     </select>
-
-    <!-- RQ-0011 식재료 전체 조회 --> 
-
+    <!-- RQ-0011 식재료 전체 조회 -->
     <select id="selectFridge"
             resultType="IngredientResponseDTO">
         SELECT  
@@ -104,9 +92,7 @@
             ingredients_id ASC
 
     </select>
-
-    <!-- RQ-0012 삭제된 식재료 단건 조회 (쓰레기통에서) --> 
-
+    <!-- RQ-0012 삭제된 식재료 단건 조회 (쓰레기통에서) -->
     <select id="selectDiscardedIngredient"
             resultType="IngredientResponseDTO">
         SELECT  
@@ -122,10 +108,8 @@
         FROM    ingredients
         WHERE   ingredients_id = #{ingredientsId}
         AND     status = 'DISCARDED'
-    </select>    
-
-    <!-- RQ-0013 삭제된 식재료 전체 조회 (쓰레기통에서) --> 
-
+    </select>
+    <!-- RQ-0013 삭제된 식재료 전체 조회 (쓰레기통에서) -->
     <select id="selectTrash"
             resultType="IngredientResponseDTO">
         SELECT
@@ -145,32 +129,56 @@
             DATEDIFF(CURDATE(), expiration_date) ASC,
             storage_date ASC,
             ingredients_id ASC
-    </select>    
-
-    <!-- RQ-0014 삭제된 식재료 복구 --> 
-
+    </select>
+    <!-- RQ-0014 삭제된 식재료 복구 -->
     <update id="restoreIngredient">
         UPDATE ingredients
         SET status = 'RESTORE'
         WHERE ingredients_id = #{ingredientsId}
         AND status = 'DISCARDED'
     </update>
-
-    <!-- RQ-0015 삭제된 식재료 완전 삭제 --> 
-
+    <!-- RQ-0015 삭제된 식재료 완전 삭제 -->
     <delete id="deleteIngredient">
         DELETE FROM ingredients
         WHERE ingredients_id = #{ingredientsId}
         AND status = 'DISCARDED'
     </delete>
-
-    <!-- RQ-0016 삭제된 식재료 완전 자동 삭제 --> 
-
+    <!-- RQ-0016 삭제된 식재료 완전 자동 삭제 -->
     <delete id="autoDelete">
         DELETE FROM ingredients
         WHERE user_id = #{userId}
         AND status = 'DISCARDED'
         AND expiration_date IS NOT NULL
         AND DATEDIFF(CURDATE(), expiration_date) &gt; 30
-    </delete>    
+    </delete>
+    <!-- 추가: 삭제된 식재료 이름 조회 -->
+    <select id="selectTrashByName">
+    SELECT
+        ingredients_id   AS ingredientsId,
+        ingredients_name AS ingredientsName,
+        amount           AS amount,
+        storage_date     AS storageDate,
+        expiration_date  AS expirationDate,
+        custom_date      AS customDate,
+        storage_condition AS storageCondition,
+        user_id          AS userId,
+        status           AS status
+    FROM (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (
+                PARTITION BY ingredients_name
+                ORDER BY storage_date DESC, ingredients_id DESC
+            ) AS rn
+        FROM ingredients
+        WHERE user_id = #{userId}
+        AND status IN ('CONSUMED', 'DISCARDED')
+        AND ingredients_name LIKE CONCAT('%', #{ingredientName}, '%')
+    ) t
+    WHERE rn = 1
+    ORDER BY
+        DATEDIFF(CURDATE(), expiration_date) ASC,
+        storage_date ASC,
+        ingredients_id ASC;
+    </select>
 </mapper>

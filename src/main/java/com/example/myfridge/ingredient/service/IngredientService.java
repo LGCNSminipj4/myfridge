@@ -100,4 +100,9 @@ public class IngredientService {
     // return ingredientMapper.autoDelete(userId);
     // }
 
+    @Transactional
+    public List<IngredientResponseDTO> getTrashByName(String userId, String ingredientName) {
+        System.out.println(">>>> ingredient service getTrashByName");
+        return ingredientMapper.selectTrashByName(userId, ingredientName);
+    }
 }
