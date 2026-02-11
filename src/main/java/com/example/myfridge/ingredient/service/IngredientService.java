@@ -110,4 +110,9 @@ public class IngredientService {
         return ingredientMapper.selectConsumedList(userId);
     }
 
+    @Transactional
+    public int consumeIngredient(Integer ingredientsId) {
+        return ingredientMapper.consumeIngredient(ingredientsId);
+    }
+
 }

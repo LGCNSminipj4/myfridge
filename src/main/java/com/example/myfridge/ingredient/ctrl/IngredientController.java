@@ -284,4 +284,28 @@ public class IngredientController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    // 식재료를 소비완료 상태로 변경
+    @Operation(summary = "식재료 소비완료 처리", description = """
+            선택한 식재료를 소비완료(CONSUMED) 상태로 변경합니다.
+            이때 expirationDate를 소비일 기준으로 오늘 날짜(CURDATE)로 덮어씁니다.
+
+            - ACTIVE, RESTORE 상태인 식재료만 소비완료 처리할 수 있습니다.
+            """)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "소비완료 처리 성공"),
+            @ApiResponse(responseCode = "404", description = "대상 식재료 없음")
+    })
+    @PutMapping("/consumed/{ingredientsId}")
+    public ResponseEntity<Map<String, String>> consumeIngredient(
+            @PathVariable(name = "ingredientsId") Integer ingredientsId) {
+
+        int flag = ingredientService.consumeIngredient(ingredientsId);
+
+        if (flag == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "소비 처리할 식재료가 없습니다."));
+        }
+        return ResponseEntity.ok(Map.of("message", "소비 완료 처리되었습니다."));
+    }
 }

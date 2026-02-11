@@ -10,32 +10,34 @@ import com.example.myfridge.ingredient.domain.dto.IngredientResponseDTO;
 
 @Mapper
 public interface IngredientMapper {
-    int insertIngredient(IngredientRequestDTO request);
+        int insertIngredient(IngredientRequestDTO request);
 
-    int updateIngredient(
-            @Param("ingredientsId") Integer ingredientsId,
-            @Param("request") IngredientRequestDTO request);
+        int updateIngredient(
+                        @Param("ingredientsId") Integer ingredientsId,
+                        @Param("request") IngredientRequestDTO request);
 
-    int discardIngredient(Integer ingredientsId);
+        int discardIngredient(Integer ingredientsId);
 
-    int autoDiscard(String userId);
+        int autoDiscard(String userId);
 
-    IngredientResponseDTO selectIngredient(Integer ingredientsId);
+        IngredientResponseDTO selectIngredient(Integer ingredientsId);
 
-    List<IngredientResponseDTO> selectFridge(String userId);
+        List<IngredientResponseDTO> selectFridge(String userId);
 
-    IngredientResponseDTO selectDiscardedIngredient(Integer ingredientsId);
+        IngredientResponseDTO selectDiscardedIngredient(Integer ingredientsId);
 
-    List<IngredientResponseDTO> selectTrash(String userId);
+        List<IngredientResponseDTO> selectTrash(String userId);
 
-    int restoreIngredient(Integer ingredientsId);
+        int restoreIngredient(Integer ingredientsId);
 
-    int deleteIngredient(Integer ingredientsId);
+        int deleteIngredient(Integer ingredientsId);
 
-    int autoDelete(String userId);
+        int autoDelete(String userId);
 
-    IngredientResponseDTO selectConsumedIngredient(Integer ingredientsId);
+        IngredientResponseDTO selectConsumedIngredient(Integer ingredientsId);
 
-    List<IngredientResponseDTO> selectConsumedList(String userId);
+        List<IngredientResponseDTO> selectConsumedList(String userId);
+
+        int consumeIngredient(Integer ingredientsId);
 
 }
