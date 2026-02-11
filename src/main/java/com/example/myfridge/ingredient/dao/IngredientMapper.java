@@ -42,4 +42,6 @@ public interface IngredientMapper {
 
     List<IngredientResponseDTO> selectConsumedList(String userId);
 
+    int consumeIngredient(Integer ingredientsId);
+
 }

@@ -215,4 +215,12 @@
         WHERE user_id = #{userId}
         AND status = 'CONSUMED'
     </select>
+    <!-- CONSUMED 상태로 변경 -->
+    <update id="consumeIngredient">
+        UPDATE ingredients
+        SET status = 'CONSUMED',
+            expiration_date = CURDATE()
+        WHERE ingredients_id = #{ingredientsId}
+        AND status IN ('ACTIVE', 'RESTORE')
+    </update>
 </mapper>
