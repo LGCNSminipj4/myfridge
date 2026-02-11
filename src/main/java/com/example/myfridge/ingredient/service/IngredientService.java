@@ -105,4 +105,15 @@ public class IngredientService {
         System.out.println(">>>> ingredient service getTrashByName");
         return ingredientMapper.selectTrashByName(userId, ingredientName);
     }
+
+    @Transactional(readOnly = true)
+    public IngredientResponseDTO getConsumedIngredient(Integer ingredientsId) {
+        return ingredientMapper.selectConsumedIngredient(ingredientsId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<IngredientResponseDTO> getConsumedList(String userId) {
+        return ingredientMapper.selectConsumedList(userId);
+    }
+
 }

@@ -181,4 +181,38 @@
         storage_date ASC,
         ingredients_id ASC;
     </select>
+    <!-- 소비완료 단건 조회 -->
+    <select id="selectConsumedIngredient" 
+            resultType="IngredientResponseDTO">
+        SELECT
+            ingredients_id      AS ingredientsId,
+            ingredients_name    AS ingredientsName,
+            amount              AS amount,
+            storage_date        AS storageDate,
+            expiration_date     AS expirationDate,
+            custom_date         AS customDate,
+            storage_condition   AS storageCondition,
+            user_id             AS userId,
+            status              AS status
+        FROM ingredients
+        WHERE ingredients_id = #{ingredientsId}
+        AND status = 'CONSUMED'
+    </select>
+    <!-- 소비완료 전체 조회 -->
+    <select id="selectConsumedList" 
+            resultType="IngredientResponseDTO">
+        SELECT
+            ingredients_id      AS ingredientsId,
+            ingredients_name    AS ingredientsName,
+            amount              AS amount,
+            storage_date        AS storageDate,
+            expiration_date     AS expirationDate,
+            custom_date         AS customDate,
+            storage_condition   AS storageCondition,
+            user_id             AS userId,
+            status              AS status
+        FROM ingredients
+        WHERE user_id = #{userId}
+        AND status = 'CONSUMED'
+    </select>
 </mapper>

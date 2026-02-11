@@ -38,4 +38,8 @@ public interface IngredientMapper {
 
     int autoDelete(String userId);
 
+    IngredientResponseDTO selectConsumedIngredient(Integer ingredientsId);
+
+    List<IngredientResponseDTO> selectConsumedList(String userId);
+
 }

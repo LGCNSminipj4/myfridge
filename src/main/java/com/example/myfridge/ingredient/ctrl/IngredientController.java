@@ -264,4 +264,39 @@ public class IngredientController {
         List<IngredientResponseDTO> result = ingredientService.getTrashByName(userId, ingredientName);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
+
+    // 소비완료 단건 조회
+    @Operation(summary = "소비한 식재료 단건 조회", description = "CONSUMED 상태 식재료를 단건 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "404", description = "조회 대상 없음")
+    })
+    @GetMapping("/consumed/detail/{ingredientsId}")
+    public ResponseEntity<IngredientResponseDTO> getConsumedIngredient(
+            @Parameter(description = "식재료 ID", example = "1", required = true) @PathVariable(name = "ingredientsId") Integer ingredientsId) {
+        IngredientResponseDTO result = ingredientService.getConsumedIngredient(ingredientsId);
+
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
+    // 소비완료 전체 조회
+    @Operation(summary = "소비한 식재료 전체 조회", description = "소비완료 목록을 조회합니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "조회 성공"),
+            @ApiResponse(responseCode = "404", description = "조회 결과 없음")
+    })
+    @GetMapping("/consumed")
+    public ResponseEntity<List<IngredientResponseDTO>> getConsumedList(Authentication authentication) {
+        // 인증된 사용자 정보에서 userId 추출
+        String userId = (String) authentication.getPrincipal();
+        List<IngredientResponseDTO> result = ingredientService.getConsumedList(userId);
+
+        if (result.size() == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }
