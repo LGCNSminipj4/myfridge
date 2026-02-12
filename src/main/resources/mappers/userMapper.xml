@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.myfridge.user.repository.UserMapper">
+    <!-- countByUserId -->
+    <select id="countByUserId" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+    <!-- insertUser -->
+    <insert id="insertUser">
+        INSERT INTO users (user_id, name, password, birth_year)
+        VALUES (#{userId}, #{name}, #{password}, #{birthYear})
+    </insert>
+    <!-- insertUserPrefer -->
+    <insert id="insertUserPrefer">
+        INSERT INTO users_prefer (user_id, tag_id)
+        VALUES
+        <foreach collection="tagIds" item="tagId" separator=",">
+            (#{userId}, #{tagId})
+        </foreach>
+    </insert>
+    <!-- findByUserId -->
+    <select id="findByUserId" resultType="com.example.myfridge.user.domain.User">
+        SELECT user_id as userId, name, password, birth_year as birthYear
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+    <!-- findUserPreferTags -->
+    <select id="findUserPreferTags" resultType="int">
+        SELECT tag_id
+        FROM users_prefer
+        WHERE user_id = #{userId}
+    </select>
+    <!-- updateUser -->
+    <update id="updateUser">
+        UPDATE users
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="birthYear != null">birth_year = #{birthYear},</if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+    <!-- deleteUserPrefer -->
+    <delete id="deleteUserPrefer">
+        DELETE FROM users_prefer
+        WHERE user_id = #{userId}
+    </delete>
+</mapper>

@@ -14,3 +14,13 @@ spring:
 # mybatis
 mybatis:
   mapper-locations: classpath:/mappers/**/*.xml
+  config-location: classpath:/mybatis/mybatis-config.xml
+
+# jwt
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiration: 10800000 # 3시간 (ms)
+
+youtube:
+  api:
+    key: ${YOUTUBE_API_KEY}
